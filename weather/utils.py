@@ -10,6 +10,8 @@ import requests
 
 from django.utils import timezone
 
+from rest_framework.pagination import PageNumberPagination
+
 from bs4 import BeautifulSoup
 from dateutil.relativedelta import relativedelta
 
@@ -85,3 +87,7 @@ def obtainWindSpeed(model, cities=False):
                 control = 0
         
     return json.dumps(data)
+
+
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size_query_param = 'size'

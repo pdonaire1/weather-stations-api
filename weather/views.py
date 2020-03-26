@@ -5,12 +5,18 @@
 # @version 1.0.0
 import json 
 
+from rest_framework import (
+    permissions, viewsets
+)
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions
 
+from .models import (
+    Weather, WeatherJournal
+)
 from .utils import obtainWindSpeed
-from .models import Weather
+from .serializers import WeatherJournalSerializer
+
 
 class WeatherApiView(APIView):
     """
@@ -28,3 +34,10 @@ class WeatherApiView(APIView):
 
         return Response(json.loads(response))
 
+
+class WeatherJournalViewset(viewsets.ModelViewSet):
+    """
+    """
+    queryset = WeatherJournal.objects.all()
+    serializer_class = WeatherJournalSerializer
+    permission_classes = [permissions.AllowAny]
