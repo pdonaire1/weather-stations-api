@@ -69,6 +69,7 @@ def obtainWindSpeed(model, cities=False):
                     date_now = timezone.now()
                     diff = relativedelta(date_now, object_model.date_register)
                     if diff.hours >= 1:
+                        print(city, dict_coordinates, wind_speed)
                         object_model = model.objects.create(
                             city=city,
                             coordinates=dict_coordinates,
