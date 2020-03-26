@@ -8,12 +8,15 @@
 import json
 import requests
 
+from django.utils import timezone
+
 from bs4 import BeautifulSoup
+from dateutil.relativedelta import relativedelta
 
 URL_API_WIND = 'https://app.deta.sh/hw6g4zdvlmao/'
 URL_API_CITIES = 'https://app.deta.sh/hw6g4zdvlmao/lookup?'
 
-def obtainWindSpeed(cities=False):
+def obtainWindSpeed(model, cities=False):
     """!
     function to get the api data app.deta.sh
 
@@ -61,7 +64,23 @@ def obtainWindSpeed(cities=False):
                         city = None
                 else:
                     city = None
-                data.append({'coordinates': dict_coordinates, 'wind_speed': wind_speed, 'city': city})
+                object_model = model.objects.filter(city=city, wind_speed=wind_speed).last()
+                if object_model:
+                    date_now = timezone.now()
+                    diff = relativedelta(date_now, object_model.date_register)
+                    if diff.hours >= 1:
+                        object_model = model.objects.create(
+                            city=city,
+                            coordinates=dict_coordinates,
+                            wind_speed=wind_speed
+                        )
+                else:
+                    object_model = model.objects.create(
+                        city=city,
+                        coordinates=dict_coordinates,
+                        wind_speed=wind_speed
+                    )
+                data.append({'id': object_model.pk, 'coordinates': dict_coordinates, 'wind_speed': wind_speed, 'city': city})
                 dict_coordinates = {}
                 control = 0
         

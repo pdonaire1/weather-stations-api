@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import permissions
 
 from .utils import obtainWindSpeed
+from .models import Weather
 
 class WeatherApiView(APIView):
     """
@@ -23,7 +24,7 @@ class WeatherApiView(APIView):
         """
         Return a list of all Weather.
         """
-        response = obtainWindSpeed(cities=True)
+        response = obtainWindSpeed(Weather, cities=True)
 
         return Response(json.loads(response))
 
