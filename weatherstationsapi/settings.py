@@ -80,13 +80,8 @@ WSGI_APPLICATION = 'weatherstationsapi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('NAME_DB', 'weather'),
-        'USER': os.environ.get('USER_DB', 'postgres'),
-        'PASSWORD': os.environ.get('PASS_DB', '123456'),
-        'HOST': os.environ.get('HOST_DB', 'localhost'),
-        'PORT': os.environ.get('PORT_DB', '5432'),
-        'ATOMIC_REQUESTS': True, # Create transactions on each view request
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
