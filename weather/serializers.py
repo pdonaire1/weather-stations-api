@@ -44,5 +44,7 @@ class WeatherJournalSerializer(serializers.ModelSerializer):
     
         model = WeatherJournal
         fields = (
-            'comment', 'fk_weather_id', 'fk_weather'
+            'comment', 'fk_weather_id',
+            'fk_weather', 'time'
         )
+        read_only_fields = ('time',)
