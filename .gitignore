@@ -1,8 +1,6 @@
 */__pycache__
-*/migrations
 migrations/*
 __pycache__/*
-apps/*/migrations/*
 apps/*/__pycache__/*
 results.sqlite
 config/settings.py
