@@ -14,6 +14,8 @@ from rest_framework.pagination import PageNumberPagination
 
 from bs4 import BeautifulSoup
 from dateutil.relativedelta import relativedelta
+from .models import WeatherJournal
+from .serializers import WeatherJournalSerializer
 
 URL_API_WIND = 'https://app.deta.sh/hw6g4zdvlmao/'
 URL_API_CITIES = 'https://app.deta.sh/hw6g4zdvlmao/lookup?'
@@ -82,7 +84,13 @@ def obtainWindSpeed(model, cities=False):
                         coordinates=dict_coordinates,
                         wind_speed=wind_speed
                     )
-                data.append({'id': object_model.pk, 'coordinates': dict_coordinates, 'wind_speed': wind_speed, 'city': city})
+                comments = WeatherJournal.objects.filter(fk_weather=object_model.pk)
+                data.append({
+                    'id': object_model.pk,
+                    'coordinates': dict_coordinates,
+                    'wind_speed': wind_speed,
+                    'city': city,
+                    'comments': WeatherJournalSerializer(comments, many=True).data})
                 dict_coordinates = {}
                 control = 0
         

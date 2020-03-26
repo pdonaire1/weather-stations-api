@@ -12,14 +12,33 @@ from .models import (
 class WeatherSerializer(serializers.ModelSerializer):
     """
     """
+    comments = serializers.SerializerMethodField('weather_comments')
+
+    def weather_comments(self, instance):
+        try:
+            queryset = WeatherJournal.objects.filter(fk_weather=instance.pk)
+            return WeatherCommentsSerializer(queryset, many=True).data
+        except:
+            return []
+
     class Meta:
     
         model = Weather
         fields = (
             'city', 'coordinates',
-            'wind_speed', 'date_register'
+            'wind_speed', 'date_register',
+            'comments'
         )
 
+class WeatherCommentsSerializer(serializers.ModelSerializer):
+    """
+    """
+
+    class Meta:
+    
+        model = WeatherJournal
+        fields = ('comment', 'time')
+        read_only_fields = ('time',)
 
 class WeatherJournalSerializer(serializers.ModelSerializer):
     """
@@ -44,7 +63,7 @@ class WeatherJournalSerializer(serializers.ModelSerializer):
     
         model = WeatherJournal
         fields = (
-            'comment', 'fk_weather_id',
-            'fk_weather', 'time'
+            'comment', 'time',
+            'fk_weather', 'fk_weather_id',
         )
         read_only_fields = ('time',)

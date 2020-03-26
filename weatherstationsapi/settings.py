@@ -80,8 +80,13 @@ WSGI_APPLICATION = 'weatherstationsapi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('NAME_DB', 'weather'),
+        'USER': os.environ.get('USER_DB', 'postgres'),
+        'PASSWORD': os.environ.get('PASS_DB', '123456'),
+        'HOST': os.environ.get('HOST_DB', 'localhost'),
+        'PORT': os.environ.get('PORT_DB', '5432'),
+        'ATOMIC_REQUESTS': True, # Create transactions on each view request
     }
 }
 
@@ -136,17 +141,25 @@ import dj_database_url
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
 
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = False
 
 # Cors
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
+    'https://weather-react-pdonaire1.herokuapp.com'
 )
 
-# Rest Framework
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'weather.utils.CustomPageNumberPagination',
-    'PAGE_SIZE': 20,
-    'UNICODE_JSON': True,
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10
 }
+# # Rest Framework
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'weather.utils.CustomPageNumberPagination',
+#     'PAGE_SIZE': 20,
+#     'UNICODE_JSON': True,
+#     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+# }
