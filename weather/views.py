@@ -16,7 +16,7 @@ from rest_framework import status
 from .models import (
     Weather, WeatherJournal
 )
-from .utils import obtainWindSpeed
+from .utils import WeatherUtils
 from .serializers import WeatherJournalSerializer, WeatherSerializer
 from rest_framework.pagination import PageNumberPagination
 
@@ -32,7 +32,8 @@ class WeatherApiView(APIView):
         """
         Return a list of all Weather.
         """
-        response = obtainWindSpeed(Weather, cities=True)
+        utils = WeatherUtils()
+        response = utils.obtainWindSpeed(Weather, cities=True)
 
         return Response(json.loads(response))
 
